@@ -40,11 +40,13 @@ public class SpawnerManager : MonoBehaviour
 
     public void MoveToRandomPoint(GameObject objToMove, SpawnPoint oldPoint)
     {
-        // Free up the room the item just left
-        if (oldPoint != null) oldPoint.isOccupied = false;
+        
 
         // Find a new empty room/point
         SpawnPoint newPoint = GetRandomAvailablePoint();
+
+        // Free up the room the item just left
+        if (oldPoint != null) oldPoint.isOccupied = false;
 
         if (newPoint != null)
         {
@@ -81,9 +83,6 @@ public class SpawnerManager : MonoBehaviour
         
         fartsRemaining += 1f;
         fartBar.value = (float)fartsRemaining / (float)maxFarts; // Slider value is 0 to 1
-
-        fartBar.gameObject.SetActive(false);
-        fartBar.gameObject.SetActive(true);
 
         Debug.Log($"changed fartbar val to {fartBar.value}");
     }
