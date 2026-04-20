@@ -13,8 +13,8 @@ public class MicrophoneDetector : MonoBehaviour
     private string microphoneName;
     private const int sampleWindow = 128;
     private float[] waveData = new float[sampleWindow];
-    [SerializeField] private TMP_Text textMeshPro;
-
+    [SerializeField] private TMP_Text instructions;
+    bool firstTime;
     void Start()
     {
         if (!Permission.HasUserAuthorizedPermission(Permission.Microphone))
@@ -32,6 +32,7 @@ public class MicrophoneDetector : MonoBehaviour
             while (!(Microphone.GetPosition(microphoneName) > 0)) { }
             audioSource.Play();
         }
+        firstTime = true;
     }
 
     void Update()
@@ -42,8 +43,12 @@ public class MicrophoneDetector : MonoBehaviour
         if (isDetecting)
         {
             Debug.Log("Sound Detected: " + loudness);
-            textMeshPro.text = "Loudness: " + loudness;
             // Add your logic here (e.g., mouth movement, interaction)
+        }
+
+        if (isDetecting && firstTime)
+        {
+            instructions.text = "Just Kidding, you didn't need to do that";
         }
     }
 
