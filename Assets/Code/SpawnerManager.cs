@@ -1,12 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UI;
 
 public class SpawnerManager : MonoBehaviour
 {
     public GameObject prefabToSpawn;
     public int totalItemsInGame = 3;
     private List<SpawnPoint> allPoints = new List<SpawnPoint>();
+    public Slider fartBar;
+    private float fartsRemaining = 0f;
+    private float maxFarts = 2f;
 
     void Start()
     {
@@ -59,5 +63,28 @@ public class SpawnerManager : MonoBehaviour
         List<SpawnPoint> available = allPoints.Where(p => !p.isOccupied).ToList();
         if (available.Count == 0) return null;
         return available[Random.Range(0, available.Count)];
+    }
+
+    public bool ReleaseFart()
+    {
+        if (fartsRemaining <= 0) return false;
+        
+        fartsRemaining -= 1f;
+        fartBar.value = (float)fartsRemaining / (float)maxFarts; // Slider value is 0 to 1
+
+        return true;
+    }
+
+    public void replenishFart()
+    {
+        if (fartsRemaining >= maxFarts) return;
+        
+        fartsRemaining += 1f;
+        fartBar.value = (float)fartsRemaining / (float)maxFarts; // Slider value is 0 to 1
+
+        fartBar.gameObject.SetActive(false);
+        fartBar.gameObject.SetActive(true);
+
+        Debug.Log($"changed fartbar val to {fartBar.value}");
     }
 }

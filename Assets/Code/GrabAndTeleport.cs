@@ -21,6 +21,8 @@ public class GrabAndTeleport : MonoBehaviour
             // 1. Tell the VR hand to drop the item immediately
             // This prevents the user from actually holding/throwing it
             args.manager.SelectExit(args.interactorObject, args.interactableObject);
+
+            manager.replenishFart();
             
             // 2. Teleport it to a new room
             manager.MoveToRandomPoint(this.gameObject, currentPoint);
