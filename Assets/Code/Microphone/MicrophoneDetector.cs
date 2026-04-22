@@ -49,6 +49,7 @@ public class MicrophoneDetector : MonoBehaviour
         if (isDetecting && firstTime)
         {
             instructions.text = "Just Kidding, you didn't need to do that";
+            firstTime = false;
         }
     }
 
