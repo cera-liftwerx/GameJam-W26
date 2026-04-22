@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation;
 
 
 public enum RoomRole { Powerup, Enemy, Both, Empty }
@@ -63,12 +64,25 @@ public class RoomNode : MonoBehaviour
 
     public void SetupTeleportation()
     {
+        TeleportationArea teleportArea = FindObjectOfType<TeleportationArea>();
+        if (teleportArea == null)
+        {
+            Debug.LogWarning("no teleportation area found in scene");
+            return;
+        }
+
         foreach (var floor in floorObjects)
         {
             if (floor == null) continue;
-            // add teleportation area if it doesnt already have one
-            if (floor.GetComponent<UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation.TeleportationArea>() == null)
-                floor.AddComponent<UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation.TeleportationArea>();
+            Collider col = floor.GetComponent<Collider>();
+            if (col == null) continue;
+
+            if (!teleportArea.colliders.Contains(col))
+                teleportArea.colliders.Add(col);
         }
+
+        // force re registration by toggling the component
+        teleportArea.enabled = false;
+        teleportArea.enabled = true;
     }
 }

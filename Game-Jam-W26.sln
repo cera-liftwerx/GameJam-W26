@@ -149,6 +149,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.XR.OpenXR.Features.Oc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.XR.OpenXR.Features.MockRuntime", "Unity.XR.OpenXR.Features.MockRuntime.csproj", "{544737BD-7757-2695-1D70-A88442DB0D7E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator", "Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.csproj", "{77FD64D2-0554-FF35-E335-C78B2AEBE49C}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityEditor.SpatialTracking", "UnityEditor.SpatialTracking.csproj", "{BC3660AB-6DCC-ED5B-392F-9939EA2B79F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.XR.OpenXR.Features.RuntimeDebugger", "Unity.XR.OpenXR.Features.RuntimeDebugger.csproj", "{1DC0318A-2C06-65A5-B135-08772745E440}"
@@ -467,6 +469,10 @@ Global
 		{544737BD-7757-2695-1D70-A88442DB0D7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{544737BD-7757-2695-1D70-A88442DB0D7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{544737BD-7757-2695-1D70-A88442DB0D7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77FD64D2-0554-FF35-E335-C78B2AEBE49C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77FD64D2-0554-FF35-E335-C78B2AEBE49C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77FD64D2-0554-FF35-E335-C78B2AEBE49C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77FD64D2-0554-FF35-E335-C78B2AEBE49C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BC3660AB-6DCC-ED5B-392F-9939EA2B79F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BC3660AB-6DCC-ED5B-392F-9939EA2B79F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC3660AB-6DCC-ED5B-392F-9939EA2B79F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
