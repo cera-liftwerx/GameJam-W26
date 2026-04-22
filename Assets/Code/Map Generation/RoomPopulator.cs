@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 
 public class RoomPopulator
@@ -16,6 +17,7 @@ public class RoomPopulator
     public void Populate()
     {
         PopulateControlRoom();
+        SpawnSpawnRoomPowerup();
 
         var eligible = graph.rooms
             .SelectMany(l => l)
@@ -23,7 +25,7 @@ public class RoomPopulator
             .ToList();
 
         int total = eligible.Count;
-        int powerupRoomCount = Mathf.FloorToInt(total * config.powerupMultiplier);
+        int powerupRoomCount = Mathf.FloorToInt(total * config.powerupRoomMultiplier);
         int enemyRoomCount = Mathf.FloorToInt(total * config.enemyRoomMultiplier);
 
         Shuffle(eligible);
@@ -54,9 +56,38 @@ public class RoomPopulator
         }
     }
 
+    void SpawnSpawnRoomPowerup()
+    {
+        var spawnRoom = graph.rooms[0][0];
+        if (spawnRoom == null || config.powerupPrefab == null) return;
+
+        var spawnPoints = spawnRoom.powerupSpawnPoints
+            .Where(sp => sp != null)
+            .ToArray();
+
+        if (spawnPoints.Length == 0)
+        {
+            Debug.LogWarning("spawn room has no powerup spawn points assigned");
+            return;
+        }
+
+        Shuffle(spawnPoints);
+        Debug.Log($"[powerup] spawning 1 powerup in spawn room at {spawnPoints[0].position}");
+
+        GameObject.Instantiate(
+            config.powerupPrefab,
+            spawnPoints[0].position,
+            spawnPoints[0].rotation,
+            spawnRoom.transform
+        );
+    }
+
     void SpawnEnemies(RoomNode room)
     {
-        if (room.roomType != RoomType.Standard) return;
+        if (room.roomType != RoomType.Standard)
+        {
+            return;
+        }
         if (config.enemyPrefab == null)
         {
             Debug.LogWarning("no enemy prefab assigned in MapConfig");
@@ -97,9 +128,9 @@ public class RoomPopulator
             return;
         }
 
-        int count = Mathf.FloorToInt(room.layerIndex * config.powerupMultiplier);
+        int count = Mathf.FloorToInt(room.layerIndex * config.powerupCountMultiplier / config.difficulty);
         count = Mathf.Clamp(count, 1, room.powerupSpawnPoints.Length);
-
+        Debug.Log($"[powerup] count: {count}, layer: {room.layerIndex}, room: {room.roomIndex}");
         var spawnPoints = room.powerupSpawnPoints
             .Where(sp => sp != null)
             .ToArray();
@@ -108,12 +139,13 @@ public class RoomPopulator
 
         for (int i = 0; i < count && i < spawnPoints.Length; i++)
         {
-            GameObject.Instantiate(
+            GameObject powerup = GameObject.Instantiate(
                 config.powerupPrefab,
                 spawnPoints[i].position,
                 spawnPoints[i].rotation,
                 room.transform
             );
+            powerup.transform.localScale = Vector3.one * 50f;
         }
     }
 
