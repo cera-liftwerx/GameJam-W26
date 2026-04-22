@@ -71,12 +71,14 @@
     <Compile Include="Assets\VRTemplateAssets\Scripts\Rotator.cs" />
     <Compile Include="Assets\VRTemplateAssets\Scripts\XRKnob.cs" />
     <Compile Include="Assets\VRTemplateAssets\Scripts\BooleanToggleVisualsController.cs" />
+    <Compile Include="Assets\Code\Audio\AudioManager.cs" />
     <Compile Include="Assets\VRTemplateAssets\Scripts\RayAttachModifier.cs" />
     <Compile Include="Assets\VRTemplateAssets\Scripts\Callout.cs" />
     <Compile Include="Assets\VRTemplateAssets\Scripts\XRPokeFollowAffordanceFill.cs" />
     <Compile Include="Assets\VRTemplateAssets\Scripts\CalloutGazeController.cs" />
     <Compile Include="Assets\Code\Map Generation\RoomPopulator.cs" />
     <Compile Include="Assets\Code\Map Generation\LayerGraph.cs" />
+    <Compile Include="Assets\Code\Audio\AlienSoundController.cs" />
     <Compile Include="Assets\Code\Map Generation\MapConfig.cs" />
     <Compile Include="Assets\Code\Map Generation\RoomNode.cs" />
     <Compile Include="Assets\VRTemplateAssets\Scripts\BezierCurve.cs" />
@@ -950,6 +952,7 @@
     <ProjectReference Include="Unity.XR.Interaction.Toolkit.Editor.csproj" />
     <ProjectReference Include="Unity.RenderPipelines.Core.Runtime.csproj" />
     <ProjectReference Include="Unity.Burst.Editor.csproj" />
+    <ProjectReference Include="Unity.XR.Interaction.Toolkit.Samples.DeviceSimulator.csproj" />
     <ProjectReference Include="Unity.Rider.Editor.csproj" />
     <ProjectReference Include="Unity.XR.OpenXR.Features.ConformanceAutomation.csproj" />
     <ProjectReference Include="Unity.XR.OpenXR.Features.OculusQuestSupport.Editor.csproj" />

@@ -4,6 +4,9 @@ public class DoorOpener : MonoBehaviour
 {
     public bool isDisabled = false;
     private Animator animator;
+    [SerializeField] AudioClip mooClip;
+    [SerializeField] AudioClip fartClip;
+
 
     void Start()
     {
@@ -23,6 +26,7 @@ public class DoorOpener : MonoBehaviour
         if (isDisabled) return;
         if (!other.CompareTag("Player")) return;
         animator.SetBool("character_nearby", true);
+        AudioManager.Instance.PlaySequenceWithOverlap(mooClip, fartClip, overlapSeconds: 0.3f);
     }
 
     void OnTriggerExit(Collider other)
