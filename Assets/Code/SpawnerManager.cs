@@ -28,7 +28,8 @@ public class SpawnerManager : MonoBehaviour
         SpawnPoint bestPoint = GetRandomAvailablePoint();
         if (bestPoint != null)
         {
-            GameObject newObj = Instantiate(prefabToSpawn, bestPoint.transform.position, bestPoint.transform.rotation);
+            Quaternion uprightRotation = Quaternion.Euler(90, 0, 0);
+            GameObject newObj = Instantiate(prefabToSpawn, bestPoint.transform.position, uprightRotation);
             
             GrabAndTeleport itemScript = newObj.GetComponent<GrabAndTeleport>();
             itemScript.manager = this;
@@ -52,7 +53,7 @@ public class SpawnerManager : MonoBehaviour
         {
             // Snap the object to the new location instantly
             objToMove.transform.position = newPoint.transform.position;
-            objToMove.transform.rotation = newPoint.transform.rotation;
+            // objToMove.transform.rotation = newPoint.transform.rotation;
             
             // Update the references
             newPoint.isOccupied = true;
