@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class DoorOpener : MonoBehaviour
 {
+    public bool isDisabled = false;
     private Animator animator;
 
     void Start()
@@ -19,12 +20,14 @@ public class DoorOpener : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if (isDisabled) return;
         if (!other.CompareTag("Player")) return;
         animator.SetBool("character_nearby", true);
     }
 
     void OnTriggerExit(Collider other)
     {
+        if (isDisabled) return;
         if (!other.CompareTag("Player")) return;
         animator.SetBool("character_nearby", false);
     }

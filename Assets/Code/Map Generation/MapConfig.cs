@@ -25,7 +25,7 @@ public class MapConfig : ScriptableObject
 
     [Header("room spacing")]
     public float standardRoomWidth = 16f; // z spacing between adjacent standard rooms
-    public float spawnToFirstLayer = 15.432f; // x spacing from spawn room to layer 1
+    public float spawnToFirstLayer = 15.19f; // x spacing from spawn room to layer 1
     public float layerToControlRoom = 4.1f; // x spacing from last standard layer to control room
     public float standardLayerStep = 16f; // x spacing between middle standard layers
 }

@@ -128,8 +128,12 @@ public class MapGenerator : MonoBehaviour
             for (int i = 0; i < allTopDoors.Count; i++)
             {
                 // first shuffled door always stays enabled to guarantee a path exists
-                bool enable = i == 0 || Random.value > 0.5f;
-                allTopDoors[i].SetActive(enable);
+                DoorOpener opener = allTopDoors[i].GetComponentInChildren<DoorOpener>();
+                if (opener != null)
+                {
+                    opener.isDisabled = i != 0 && Random.value > 0.5f;
+                    Debug.Log($"[door] layer {layer} door {allTopDoors[i].name} disabled: {opener.isDisabled}");
+                }
             }
         }
     }
