@@ -25,7 +25,27 @@ public class MapGenerator : MonoBehaviour
         PlaceAllRooms();
         RandomizeTopDoors();
         new RoomPopulator(graph, config).Populate();
+        PlacePlayer();
         DebugLogMap();
+    }
+
+    void PlacePlayer()
+    {
+        var spawnRoom = graph.rooms[0][0];
+        if (spawnRoom == null || spawnRoom.playerSpawnPoint == null)
+        {
+            Debug.LogWarning("no player spawn point assigned on spawn room");
+            return;
+        }
+
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player == null)
+        {
+            Debug.LogWarning("no gameobject tagged player found in scene");
+            return;
+        }
+
+        player.transform.position = spawnRoom.playerSpawnPoint.position;
     }
 
     void DebugLogMap()
@@ -130,6 +150,7 @@ public class MapGenerator : MonoBehaviour
             for (int i = 0; i < count; i++)
             {
                 SpawnRoom(layer, i, count, prefab);   
+                graph.rooms[layer][i].SetupTeleportation();
             }
         }
     }

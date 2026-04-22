@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 
+
 public enum RoomRole { Powerup, Enemy, Both, Empty }
 public enum RoomType { Spawn, Standard, Control }
 
@@ -17,6 +18,10 @@ public class RoomNode : MonoBehaviour
     public Transform[] powerupSpawnPoints;
     public Transform[] enemySpawnPoints;
     public Transform bossSpawnPoint;
+    public Transform playerSpawnPoint;
+
+    [Header("teleportation")]
+    public GameObject[] floorObjects; // assign all floor tile gameobjects in inspector
 
     [HideInInspector] public RoomRole role;
     [HideInInspector] public int layerIndex;
@@ -53,6 +58,17 @@ public class RoomNode : MonoBehaviour
         foreach (var sp in enemySpawnPoints)
         {
             if (sp != null) sp.gameObject.SetActive(hasEnemies);
+        }
+    }
+
+    public void SetupTeleportation()
+    {
+        foreach (var floor in floorObjects)
+        {
+            if (floor == null) continue;
+            // add teleportation area if it doesnt already have one
+            if (floor.GetComponent<UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation.TeleportationArea>() == null)
+                floor.AddComponent<UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation.TeleportationArea>();
         }
     }
 }
