@@ -7,17 +7,25 @@ public class DoorOpener : MonoBehaviour
     void Start()
     {
         animator = GetComponentInParent<Animator>();
+        if (animator == null)
+        {
+            Debug.LogWarning($"no animator found in parent of {gameObject.name}");
+        }
+        else
+        {
+            Debug.Log($"dooropener ready on {gameObject.name}, animator found: {animator.gameObject.name}");
+        }
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
-        animator.Play("door_2_open");
+        animator.SetBool("character_nearby", true);
     }
 
     void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("Player")) return;
-        animator.Play("door_2_close");
+        animator.SetBool("character_nearby", false);
     }
 }
