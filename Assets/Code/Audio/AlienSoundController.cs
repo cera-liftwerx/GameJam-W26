@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class AlienSoundController : MonoBehaviour // TODO: attach to each alien
+public class AlienSoundController : MonoBehaviour
 {
     [Header("clips for each state")]
     public AudioClip idleClip;
@@ -16,7 +16,7 @@ public class AlienSoundController : MonoBehaviour // TODO: attach to each alien
     private Animator animator;
     private Coroutine soundLoop;
 
-    private static readonly int stateIdle = Animator.StringToHash("alien_idle"); // TODO: make sure this matches
+    private static readonly int stateIdle = Animator.StringToHash("alien_idle");
     private static readonly int stateWalk = Animator.StringToHash("alien_walk");
     private static readonly int stateAttack = Animator.StringToHash("alien_attack");
     private static readonly int stateDeath = Animator.StringToHash("alien_death");

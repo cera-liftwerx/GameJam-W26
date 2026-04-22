@@ -59,12 +59,14 @@ public class AudioManager : MonoBehaviour
         }
         AudioSource src = GetFreeSource();
         src.volume = volume;
+        Debug.Log($"[audio] playing: {clip.name}");
         src.PlayOneShot(clip);
     }
 
     public void PlaySequenceWithOverlap(AudioClip first, AudioClip second, float overlapSeconds = 0.2f, float volume = 1f)
     {
         // start the first clip immediately then hand off to a coroutine
+        Debug.Log($"[audio] sequence first playing: {first.name}");
         PlayOneShot(first, volume);
         StartCoroutine(PlayAfterDelay(second, first.length - overlapSeconds, volume));
     }
@@ -72,7 +74,9 @@ public class AudioManager : MonoBehaviour
     private IEnumerator PlayAfterDelay(AudioClip clip, float delay, float volume)
     {
         // wait until just before the first clip ends then fire the second
+        Debug.Log($"[audio] sequence wait for {delay}");
         yield return new WaitForSeconds(Mathf.Max(0f, delay));
+        Debug.Log($"[audio] sequence second playing: {clip.name}");
         PlayOneShot(clip, volume);
     }
 }
