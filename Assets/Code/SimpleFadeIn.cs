@@ -38,7 +38,11 @@ public class SimpleFadeIn : MonoBehaviour
 
         // Start video
         videoPlayer.Play();
-        FadeFromTransparentToBlack();
+        box.transform.position = cameraLocation.transform.position;
+        Vector3 rot = box.transform.eulerAngles;
+        rot.y = cameraLocation.transform.eulerAngles.y; 
+        box.transform.eulerAngles = rot;
+        activationScene(false);
     }
     void OnVideoFinished(VideoPlayer vp)
     {
@@ -67,6 +71,8 @@ public class SimpleFadeIn : MonoBehaviour
         rot.y = cameraLocation.transform.eulerAngles.y; 
         box.transform.eulerAngles = rot;
         activationScene(false);
+        StartCoroutine(Fade(0f, 1f));
+        StartCoroutine(FadeRoutine(1.5f, fadeDuration+0.5f));
     }
 
     protected IEnumerator delayedFadeAway()

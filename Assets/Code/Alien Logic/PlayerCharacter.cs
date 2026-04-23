@@ -8,6 +8,8 @@ using System.Runtime.CompilerServices;
 public class PlayerCharacter : Character
 {
     [SerializeField] public MicrophoneDetector microphoneDetector;
+
+    [SerializeField] SimpleFadeIn simpleFadeIn;
     protected override void Awake()
     {
         base.Awake();
@@ -16,6 +18,7 @@ public class PlayerCharacter : Character
     protected override void Start()
     {
         if (microphoneDetector == null) Debug.LogWarning("The microphone is null warning");
+        if (simpleFadeIn == null) Debug.LogWarning("The fade in controller is null warning");
         audioSource.volume = 0.5f;
         base.Start();
     }
@@ -58,6 +61,7 @@ public class PlayerCharacter : Character
     protected override IEnumerator Die()
     {
         //GameJamManager.Instance.GameOver();
+        simpleFadeIn.FadeFromTransparentToBlack();
         yield return null;
     }
 }

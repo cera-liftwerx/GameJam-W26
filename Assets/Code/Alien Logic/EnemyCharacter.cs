@@ -44,42 +44,37 @@ public class EnemyCharacter : Character
         attackHitBox.hitCollider.enabled = false;
     }
 
-    protected override void Update()
+    private float chaseElapsed = 0f;
+
+    protected void FixedUpdate()
     {
-        base.Update();
-
-        if (chasing) return; // Early exit - prevents any re-triggering
-
         float distToPlayer = Vector3.Distance(transform.position, player.transform.position);
         bool tooClose = distToPlayer < aggroDistance;
         bool tooLoud  = microphoneDetector.isDetecting && distToPlayer < 5f;
 
-        if (tooClose || tooLoud)
+        if (!chasing && (tooClose || tooLoud))
         {
             chasing = true;
-            StartCoroutine(ChasePlayer());
+            chaseElapsed = 0f;
+            animator.SetTrigger("Moving");
+            agent.speed = speed;
+            StartCoroutine(AutoAttack()); // keep if AutoAttack needs per-frame yield
         }
-    }
 
-    private IEnumerator ChasePlayer()
-    {
-        animator.SetTrigger("Moving");
-        agent.speed = speed;
-        StartCoroutine(AutoAttack());
-        float elapsed = 0f;
-        while (elapsed < chasingTime)
+        if (chasing)
         {
-            agent.SetDestination(player.transform.position); // update every frame
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-        StopCoroutine(AutoAttack());
-        // Stop and idle
-        agent.ResetPath();         // clears destination so agent stops moving
-        agent.speed = 0f;
-        animator.SetTrigger("Idle");
+            agent.SetDestination(player.transform.position);
+            chaseElapsed += Time.fixedDeltaTime;
 
-        chasing = false;
+            if (chaseElapsed >= chasingTime)
+            {
+                StopCoroutine(AutoAttack());
+                agent.ResetPath();
+                agent.speed = 0f;
+                animator.SetTrigger("Idle");
+                chasing = false;
+            }
+        }
     }
     private IEnumerator AutoAttack()
     {
