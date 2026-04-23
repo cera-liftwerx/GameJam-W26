@@ -84,6 +84,7 @@
     <Compile Include="Assets\Code\Alien Logic\Character.cs" />
     <Compile Include="Assets\Code\Alien Logic\EnemyCharacter.cs" />
     <Compile Include="Assets\VRTemplateAssets\Scripts\BezierCurve.cs" />
+    <Compile Include="Assets\Code\SimpleFadeIn.cs" />
     <Compile Include="Assets\VRTemplateAssets\Scripts\LaunchProjectile.cs" />
     <Compile Include="Assets\VRTemplateAssets\Scripts\StepManager.cs" />
     <Compile Include="Assets\Code\GrabAndTeleport.cs" />
