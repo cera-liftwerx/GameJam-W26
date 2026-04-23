@@ -1,5 +1,6 @@
-using System.Collections;
 using UnityEngine;
+using System.Collections;
+using UnityEngine.Audio;
 
 public class AlienSoundController : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class AlienSoundController : MonoBehaviour
     private static readonly int stateWalk = Animator.StringToHash("alien_walk");
     private static readonly int stateAttack = Animator.StringToHash("alien_attack");
     private static readonly int stateDeath = Animator.StringToHash("alien_death");
+
+    [SerializeField] private AudioMixerGroup mixerGroup;
 
     private void Awake()
     {
@@ -50,7 +53,7 @@ public class AlienSoundController : MonoBehaviour
 
             if (clipToPlay != null)
             {
-                AudioManager.Instance.PlayOneShot(clipToPlay);
+                AudioManager.Instance.PlayOneShot(clipToPlay, 1f, mixerGroup);
             }
         }
     }

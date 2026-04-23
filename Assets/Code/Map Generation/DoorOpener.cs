@@ -26,7 +26,7 @@ public class DoorOpener : MonoBehaviour
         if (isDisabled) return;
         if (!other.CompareTag("Player")) return;
         animator.SetBool("character_nearby", true);
-        AudioManager.Instance.PlaySequenceWithOverlap(mooClip, fartClip, overlapSeconds: 0.3f);
+        AudioManager.Instance.PlaySequenceWithOverlap(mooClip, fartClip, overlapSeconds: 0.7f);
     }
 
     void OnTriggerExit(Collider other)

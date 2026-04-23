@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
@@ -51,7 +52,7 @@ public class AudioManager : MonoBehaviour
         return AddSourceToPool();
     }
 
-    public void PlayOneShot(AudioClip clip, float volume = 1f)
+    public void PlayOneShot(AudioClip clip, float volume = 1f, AudioMixerGroup mixerGroup = null)
     {
         if (clip == null) 
         {
@@ -60,6 +61,7 @@ public class AudioManager : MonoBehaviour
         AudioSource src = GetFreeSource();
         src.volume = volume;
         Debug.Log($"[audio] playing: {clip.name}");
+        src.outputAudioMixerGroup = mixerGroup;
         src.PlayOneShot(clip);
     }
 
@@ -68,7 +70,7 @@ public class AudioManager : MonoBehaviour
         // start the first clip immediately then hand off to a coroutine
         Debug.Log($"[audio] sequence first playing: {first.name}");
         PlayOneShot(first, volume);
-        StartCoroutine(PlayAfterDelay(second, first.length - overlapSeconds, volume));
+        StartCoroutine(PlayAfterDelay(second, first.length - overlapSeconds, 5f));
     }
 
     private IEnumerator PlayAfterDelay(AudioClip clip, float delay, float volume)
