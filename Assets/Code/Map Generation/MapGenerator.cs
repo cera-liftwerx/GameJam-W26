@@ -11,8 +11,6 @@ public class MapGenerator : MonoBehaviour
     public GameObject standardRoomPrefab;
     public GameObject spawnRoomPrefab;
 
-    [SerializeField] private SpawnerManager spawnManager;
-
     private LayerGraph graph = new();
 
     void Awake()
@@ -26,13 +24,14 @@ public class MapGenerator : MonoBehaviour
         graph = new LayerGraph();
         PlaceAllRooms();
         RandomizeTopDoors();
-        new RoomPopulator(graph, config, spawnManager).Populate();
+        new RoomPopulator(graph, config).Populate();
         PlacePlayer();
-        DebugLogMap();
+        // DebugLogMap();
     }
 
     void PlacePlayer()
     {
+        // Debug.Log("why fort PlacePlayer");
         var spawnRoom = graph.rooms[0][0];
         if (spawnRoom == null || spawnRoom.playerSpawnPoint == null)
         {
@@ -46,64 +45,64 @@ public class MapGenerator : MonoBehaviour
             Debug.LogWarning("no gameobject tagged player found in scene");
             return;
         }
-
+        // Debug.Log($"why fort {spawnRoom.playerSpawnPoint.position}, player name {player.name}");
         player.transform.position = spawnRoom.playerSpawnPoint.position;
     }
 
-    void DebugLogMap()
-    {
-        int totalRooms = graph.rooms.SelectMany(l => l).Count();
-        Debug.Log($"=== map generation complete ===");
-        Debug.Log($"total layers: {graph.LayerCount} | total rooms: {totalRooms}");
+    // void DebugLogMap()
+    // {
+    //     int totalRooms = graph.rooms.SelectMany(l => l).Count();
+    //     Debug.Log($"=== map generation complete ===");
+    //     Debug.Log($"total layers: {graph.LayerCount} | total rooms: {totalRooms}");
 
-        for (int layer = 0; layer < graph.LayerCount; layer++)
-        {
-            var layerRooms = graph.rooms[layer];
-            Debug.Log($"--- layer {layer} | {layerRooms.Count} room(s) ---");
+    //     for (int layer = 0; layer < graph.LayerCount; layer++)
+    //     {
+    //         var layerRooms = graph.rooms[layer];
+    //         Debug.Log($"--- layer {layer} | {layerRooms.Count} room(s) ---");
 
-            foreach (var room in layerRooms)
-            {
-                Debug.Log($"  room {room.roomIndex} | type: {room.roomType} | role: {room.role}");
+    //         foreach (var room in layerRooms)
+    //         {
+    //             Debug.Log($"  room {room.roomIndex} | type: {room.roomType} | role: {room.role}");
 
-                // enemy spawn points
-                if (room.roomType == RoomType.Standard)
-                {
-                    var activeEnemySpawns = room.enemySpawnPoints
-                        .Where(sp => sp != null && sp.gameObject.activeSelf)
-                        .ToArray();
-                    Debug.Log($"    enemy spawns active: {activeEnemySpawns.Length} of {room.enemySpawnPoints.Length}");
-                    foreach (var sp in activeEnemySpawns)
-                        Debug.Log($"      enemy spawn at {sp.position}");
+    //             // enemy spawn points
+    //             if (room.roomType == RoomType.Standard)
+    //             {
+    //                 var activeEnemySpawns = room.enemySpawnPoints
+    //                     .Where(sp => sp != null && sp.gameObject.activeSelf)
+    //                     .ToArray();
+    //                 Debug.Log($"    enemy spawns active: {activeEnemySpawns.Length} of {room.enemySpawnPoints.Length}");
+    //                 foreach (var sp in activeEnemySpawns)
+    //                     Debug.Log($"      enemy spawn at {sp.position}");
 
-                    // powerup spawn points
-                    var activePowerupSpawns = room.powerupSpawnPoints
-                        .Where(sp => sp != null && sp.gameObject.activeSelf)
-                        .ToArray();
-                    Debug.Log($"    powerup spawns active: {activePowerupSpawns.Length} of {room.powerupSpawnPoints.Length}");
-                    foreach (var sp in activePowerupSpawns)
-                        Debug.Log($"      powerup spawn at {sp.position}");
-                }
+    //                 // powerup spawn points
+    //                 var activePowerupSpawns = room.powerupSpawnPoints
+    //                     .Where(sp => sp != null && sp.gameObject.activeSelf)
+    //                     .ToArray();
+    //                 Debug.Log($"    powerup spawns active: {activePowerupSpawns.Length} of {room.powerupSpawnPoints.Length}");
+    //                 foreach (var sp in activePowerupSpawns)
+    //                     Debug.Log($"      powerup spawn at {sp.position}");
+    //             }
 
-                // control room boss spawn
-                if (room.roomType == RoomType.Control)
-                {
-                    if (room.bossSpawnPoint != null)
-                        Debug.Log($"    boss spawn at {room.bossSpawnPoint.position}");
-                    else
-                        Debug.Log($"    no boss spawn point assigned");
-                }
+    //             // control room boss spawn
+    //             if (room.roomType == RoomType.Control)
+    //             {
+    //                 if (room.bossSpawnPoint != null)
+    //                     Debug.Log($"    boss spawn at {room.bossSpawnPoint.position}");
+    //                 else
+    //                     Debug.Log($"    no boss spawn point assigned");
+    //             }
 
-                // top doors
-                if (room.doorTop != null && room.doorTop.Count > 0)
-                {
-                    int activeDoors = room.doorTop.Count(d => d != null && d.activeSelf);
-                    Debug.Log($"    top doors active: {activeDoors} of {room.doorTop.Count}");
-                }
-            }
-        }
+    //             // top doors
+    //             if (room.doorTop != null && room.doorTop.Count > 0)
+    //             {
+    //                 int activeDoors = room.doorTop.Count(d => d != null && d.activeSelf);
+    //                 Debug.Log($"    top doors active: {activeDoors} of {room.doorTop.Count}");
+    //             }
+    //         }
+    //     }
 
-        Debug.Log($"=== end of map debug ===");
-    }
+    //     Debug.Log($"=== end of map debug ===");
+    // }
 
     void RandomizeConfig()
     {
@@ -134,7 +133,7 @@ public class MapGenerator : MonoBehaviour
                 if (opener != null)
                 {
                     opener.isDisabled = i != 0 && Random.value > 0.5f;
-                    Debug.Log($"[door] layer {layer} door {allTopDoors[i].name} disabled: {opener.isDisabled}");
+                    // Debug.Log($"[door] layer {layer} door {allTopDoors[i].name} disabled: {opener.isDisabled}");
                 }
             }
         }

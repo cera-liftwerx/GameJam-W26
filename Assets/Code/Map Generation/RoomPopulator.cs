@@ -7,18 +7,17 @@ public class RoomPopulator
 {
     private LayerGraph graph;
     private MapConfig config;
-    private SpawnerManager spawnerManager;
 
 
-    public RoomPopulator(LayerGraph graph, MapConfig config, SpawnerManager spawnerManager)
+    public RoomPopulator(LayerGraph graph, MapConfig config)
     {
         this.graph = graph;
         this.config = config;
-        this.spawnerManager = GameObject.FindObjectOfType<SpawnerManager>();
     }
 
     public void Populate()
     {
+        // Debug.Log($"[forts] in populate");
         PopulateControlRoom();
         SpawnSpawnRoomPowerup();
 
@@ -30,6 +29,7 @@ public class RoomPopulator
         int total = eligible.Count;
         int powerupRoomCount = Mathf.FloorToInt(total * config.powerupRoomMultiplier);
         int enemyRoomCount = Mathf.FloorToInt(total * config.enemyRoomMultiplier);
+        // Debug.Log($"[forts] total: {total}, powerupRoomCount: {powerupRoomCount}, enemyRoomCount: {enemyRoomCount}, config.powerupRoomMultiplier: {config.powerupRoomMultiplier}, config.enemyRoomMultiplier: {config.enemyRoomMultiplier}");
 
         Shuffle(eligible);
 
@@ -39,21 +39,37 @@ public class RoomPopulator
             bool wantsPowerup = i < powerupRoomCount;
             bool wantsEnemy = i < enemyRoomCount;
             bool coexist = Random.value < config.coexistChance;
+            // Debug.Log($"[forts] populating room: {room.roomType}, i: {i }, powerupRoomCount: {powerupRoomCount}, enemyRoomCount: {enemyRoomCount}, wantsPowerup: {wantsPowerup}, wantsEnemy: {wantsEnemy}, coexist: {coexist}, config.coexistChance: {config.coexistChance}");
 
             RoomRole role;
-            if (wantsPowerup && wantsEnemy && coexist) role = RoomRole.Both;
-            else if (wantsPowerup) role = RoomRole.Powerup;
-            else if (wantsEnemy) role = RoomRole.Enemy;
-            else role = RoomRole.Empty;
+            if (wantsPowerup && wantsEnemy && coexist) 
+            {
+                role = RoomRole.Both;
+            }
+            else if (wantsEnemy) 
+            {
+                role = RoomRole.Enemy;
+            }
+            else if (wantsPowerup) 
+            {
+                role = RoomRole.Powerup;
+            }
+            else 
+            {
+                role = RoomRole.Empty;
+            }
+            // Debug.Log($"[forts] populating room: {room.layerIndex}, {room.roomIndex}, room type: {room.roomType}, room role: {role}");
 
             room.SetRole(role);
 
             if (role == RoomRole.Enemy || role == RoomRole.Both)
             {
+                // Debug.Log($"[forts] calling SpawnEnemies");
                 SpawnEnemies(room);
             }
             if (role == RoomRole.Powerup || role == RoomRole.Both)
             {
+                // Debug.Log($"[forts] calling spawnPowerups");
                 SpawnPowerups(room);
             }
         }
@@ -70,22 +86,20 @@ public class RoomPopulator
 
         if (spawnPoints.Length == 0)
         {
-            Debug.LogWarning("spawn room has no powerup spawn points assigned");
+            // Debug.LogWarning("spawn room has no powerup spawn points assigned");
             return;
         }
 
         Shuffle(spawnPoints);
-        Debug.Log($"[powerup] spawning 1 powerup in spawn room at {spawnPoints[0].position}");
+        // Debug.Log($"[powerup] spawning 1 powerup in spawn room at {spawnPoints[0].position}");
 
-        GameObject.Instantiate(
+        GameObject powerup = GameObject.Instantiate(
             config.powerupPrefab,
             spawnPoints[0].position,
             spawnPoints[0].rotation,
             spawnRoom.transform
         );
-        SpawnPoint spawnPoint = new SpawnPoint(spawnPoints[0]);
-        spawnerManager.allPoints.Add(spawnPoint);
-        Debug.Log($"adding spawn point {spawnPoint.spawnPointTf.name}");
+        spawnPoints[0].GetComponent<SpawnPoint>().isOccupied = true;
     }
 
     void SpawnEnemies(RoomNode room)
@@ -96,7 +110,7 @@ public class RoomPopulator
         }
         if (config.enemyPrefab == null)
         {
-            Debug.LogWarning("no enemy prefab assigned in MapConfig");
+            // Debug.LogWarning("no enemy prefab assigned in MapConfig");
             return;
         }
 
@@ -130,18 +144,19 @@ public class RoomPopulator
         }
         if (config.powerupPrefab == null)
         {
-            Debug.LogWarning("no powerup prefab assigned in MapConfig");
+            // Debug.LogWarning("no powerup prefab assigned in MapConfig");
             return;
         }
 
         int count = Mathf.FloorToInt(room.layerIndex * config.powerupCountMultiplier / config.difficulty);
         count = Mathf.Clamp(count, 1, room.powerupSpawnPoints.Length);
-        Debug.Log($"[powerup] count: {count}, layer: {room.layerIndex}, room: {room.roomIndex}");
+        // Debug.Log($"[powerup] count: {count}, layer: {room.layerIndex}, room: {room.roomIndex}");
         var spawnPoints = room.powerupSpawnPoints
             .Where(sp => sp != null)
             .ToArray();
 
         Shuffle(spawnPoints);
+
 
         for (int i = 0; i < count && i < spawnPoints.Length; i++)
         {
@@ -151,10 +166,7 @@ public class RoomPopulator
                 spawnPoints[i].rotation,
                 room.transform
             );
-            powerup.transform.localScale = Vector3.one * 50f;
-            SpawnPoint spawnPoint = new SpawnPoint(spawnPoints[i]);
-            spawnerManager.allPoints.Add(spawnPoint);
-            Debug.Log($"adding spawn point {spawnPoint.spawnPointTf.name}");
+            spawnPoints[i].GetComponent<SpawnPoint>().isOccupied = true;
         }
     }
 
@@ -167,7 +179,7 @@ public class RoomPopulator
         if (controlRoom == null || config.enemyPrefab == null) return;
         if (controlRoom.bossSpawnPoint == null)
         {
-            Debug.LogWarning("control room has no boss spawn point assigned");
+            // Debug.LogWarning("control room has no boss spawn point assigned");
             return;
         }
 
