@@ -7,11 +7,14 @@ public class RoomPopulator
 {
     private LayerGraph graph;
     private MapConfig config;
+    private SpawnerManager spawnerManager;
 
-    public RoomPopulator(LayerGraph graph, MapConfig config)
+
+    public RoomPopulator(LayerGraph graph, MapConfig config, SpawnerManager spawnerManager)
     {
         this.graph = graph;
         this.config = config;
+        this.spawnerManager = GameObject.FindObjectOfType<SpawnerManager>();
     }
 
     public void Populate()
@@ -80,6 +83,9 @@ public class RoomPopulator
             spawnPoints[0].rotation,
             spawnRoom.transform
         );
+        SpawnPoint spawnPoint = new SpawnPoint(spawnPoints[0]);
+        spawnerManager.allPoints.Add(spawnPoint);
+        Debug.Log($"adding spawn point {spawnPoint.spawnPointTf.name}");
     }
 
     void SpawnEnemies(RoomNode room)
@@ -146,6 +152,9 @@ public class RoomPopulator
                 room.transform
             );
             powerup.transform.localScale = Vector3.one * 50f;
+            SpawnPoint spawnPoint = new SpawnPoint(spawnPoints[i]);
+            spawnerManager.allPoints.Add(spawnPoint);
+            Debug.Log($"adding spawn point {spawnPoint.spawnPointTf.name}");
         }
     }
 

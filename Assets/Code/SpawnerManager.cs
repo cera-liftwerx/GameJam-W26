@@ -5,44 +5,45 @@ using UnityEngine.UI;
 
 public class SpawnerManager : MonoBehaviour
 {
-    public GameObject prefabToSpawn;
-    public int totalItemsInGame = 3;
-    private List<SpawnPoint> allPoints = new List<SpawnPoint>();
+    // public GameObject prefabToSpawn;
+    // public int totalItemsInGame = 3;
+    public List<SpawnPoint> allPoints = new List<SpawnPoint>();
     public Slider fartBar;
-    private float fartsRemaining = 0f;
+    private float fartsRemaining = 1f;
     private float maxFarts = 2f;
 
     void Start()
     {
+        fartBar.value = (float)fartsRemaining / (float)maxFarts; // Slider value is 0 to 1
         // Find all your SpawnPoint scripts in the scene
-        allPoints = FindObjectsByType<SpawnPoint>(FindObjectsSortMode.None).ToList();
+        // allPoints = FindObjectsByType<SpawnPoint>(FindObjectsSortMode.None).ToList();
 
-        for (int i = 0; i < totalItemsInGame; i++) 
-        {
-            SpawnInitialItem();
-        }
+        // for (int i = 0; i < totalItemsInGame; i++) 
+        // {
+        //     SpawnInitialItem();
+        // }
     }
 
-    void SpawnInitialItem()
-    {
-        SpawnPoint bestPoint = GetRandomAvailablePoint();
-        if (bestPoint != null)
-        {
-            Quaternion uprightRotation = Quaternion.Euler(90, 0, 0);
-            GameObject newObj = Instantiate(prefabToSpawn, bestPoint.transform.position, uprightRotation);
+    // void SpawnInitialItem()
+    // {
+    //     SpawnPoint bestPoint = GetRandomAvailablePoint();
+    //     if (bestPoint != null)
+    //     {
+    //         Quaternion uprightRotation = Quaternion.Euler(90, 0, 0);
+    //         GameObject newObj = Instantiate(prefabToSpawn, bestPoint.transform.position, uprightRotation);
             
-            GrabAndTeleport itemScript = newObj.GetComponent<GrabAndTeleport>();
-            itemScript.manager = this;
-            itemScript.currentPoint = bestPoint;
+    //         GrabAndTeleport itemScript = newObj.GetComponent<GrabAndTeleport>();
+    //         itemScript.manager = this;
+    //         itemScript.currentPoint = bestPoint;
             
-            bestPoint.isOccupied = true;
-        }
-    }
+    //         bestPoint.isOccupied = true;
+    //     }
+    // }
 
     public void MoveToRandomPoint(GameObject objToMove, SpawnPoint oldPoint)
     {
         
-
+        Debug.Log($"[fart] inside MoveToRandomPoint for");
         // Find a new empty room/point
         SpawnPoint newPoint = GetRandomAvailablePoint();
 
@@ -52,17 +53,21 @@ public class SpawnerManager : MonoBehaviour
         if (newPoint != null)
         {
             // Snap the object to the new location instantly
-            objToMove.transform.position = newPoint.transform.position;
+            objToMove.transform.position = newPoint.spawnPointTf.position;
             // objToMove.transform.rotation = newPoint.transform.rotation;
             
             // Update the references
             newPoint.isOccupied = true;
             objToMove.GetComponent<GrabAndTeleport>().currentPoint = newPoint;
+        } else
+        {
+            objToMove.SetActive(false);
         }
     }
 
     SpawnPoint GetRandomAvailablePoint()
     {
+        Debug.Log($"[fart] inside GetRandomAvailablePoint for");
         List<SpawnPoint> available = allPoints.Where(p => !p.isOccupied).ToList();
         if (available.Count == 0) return null;
         return available[Random.Range(0, available.Count)];
@@ -80,11 +85,14 @@ public class SpawnerManager : MonoBehaviour
 
     public void replenishFart()
     {
+        Debug.Log("[fart] inside replenishFart");
         if (fartsRemaining >= maxFarts) return;
+
+        Debug.Log("[fart] inside replenishFart and able to replenish");
         
         fartsRemaining += 1f;
         fartBar.value = (float)fartsRemaining / (float)maxFarts; // Slider value is 0 to 1
 
-        Debug.Log($"changed fartbar val to {fartBar.value}");
+        Debug.Log($"[fart] changed fartbar val to {fartBar.value}");
     }
 }

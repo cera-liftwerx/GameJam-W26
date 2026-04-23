@@ -11,6 +11,8 @@ public class MapGenerator : MonoBehaviour
     public GameObject standardRoomPrefab;
     public GameObject spawnRoomPrefab;
 
+    [SerializeField] private SpawnerManager spawnManager;
+
     private LayerGraph graph = new();
 
     void Awake()
@@ -24,7 +26,7 @@ public class MapGenerator : MonoBehaviour
         graph = new LayerGraph();
         PlaceAllRooms();
         RandomizeTopDoors();
-        new RoomPopulator(graph, config).Populate();
+        new RoomPopulator(graph, config, spawnManager).Populate();
         PlacePlayer();
         DebugLogMap();
     }
