@@ -21,6 +21,8 @@ public class FartAttack : MonoBehaviour
     private bool hasFiredThisStroke = false;
 
     public SpawnerManager spawnManager;
+    [SerializeField] AudioClip mooClip;
+    [SerializeField] AudioClip fartClip;
 
     void Start()
     {
@@ -92,6 +94,7 @@ public class FartAttack : MonoBehaviour
         fartParticles.transform.rotation = Quaternion.LookRotation(head.forward);
         
         // 3. Fire!
+        AudioManager.Instance.PlaySequenceWithOverlap(mooClip, fartClip, overlapSeconds: 0.7f);
         fartParticles.Emit(10); 
         
         Debug.Log("FART_LOG: Bubbles fired exactly where you are looking!");

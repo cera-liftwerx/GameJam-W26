@@ -9,8 +9,8 @@ public class SpawnerManager : MonoBehaviour
     // public int totalItemsInGame = 3;
     private List<SpawnPoint> allPoints = new List<SpawnPoint>();
     public Slider fartBar;
-    private float fartsRemaining = 0f;
-    private float maxFarts = 2f;
+    private float fartsRemaining = 1000f;
+    private float maxFarts = 1000f;
 
     void Start()
     {

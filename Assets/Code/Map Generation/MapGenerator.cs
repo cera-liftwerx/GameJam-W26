@@ -13,12 +13,14 @@ public class MapGenerator : MonoBehaviour
 
     private LayerGraph graph = new();
 
+    public RuntimeNavMeshBaker navMeshBaker;
+
     void Awake()
     {
         GenerateMap();
     }
 
-    void GenerateMap()
+    public void GenerateMap()
     {
         RandomizeConfig();
         graph = new LayerGraph();
@@ -26,6 +28,7 @@ public class MapGenerator : MonoBehaviour
         RandomizeTopDoors();
         new RoomPopulator(graph, config).Populate();
         PlacePlayer();
+        navMeshBaker.BakeNavMesh();
         // DebugLogMap();
     }
 
@@ -210,6 +213,7 @@ public class MapGenerator : MonoBehaviour
             : Quaternion.identity;
 
         GameObject go = Instantiate(prefab, pos, rot, transform);
+        go.tag = "MapGeometry";
         go.name = $"Room_L{layer}_R{roomIndex}";
 
         RoomNode node = go.GetComponent<RoomNode>();

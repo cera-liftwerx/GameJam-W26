@@ -40,15 +40,16 @@ public class MicrophoneDetector : MonoBehaviour
         float loudness = GetLoudnessFromMicrophone() * sensitivity;
         isDetecting = loudness > threshold;
 
-        if (isDetecting)
-        {
-            Debug.Log("Sound Detected: " + loudness);
-            // Add your logic here (e.g., mouth movement, interaction)
-        }
+        // if (isDetecting)
+        // {
+        //     Debug.Log("Sound Detected: " + loudness);
+        //     // Add your logic here (e.g., mouth movement, interaction)
+        // }
 
         if (isDetecting && firstTime)
         {
             instructions.text = "Just Kidding, you didn't need to do that";
+            firstTime = false;
         }
     }
 
