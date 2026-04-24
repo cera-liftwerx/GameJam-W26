@@ -133,6 +133,8 @@ public class GameManager : MonoBehaviour
 
     public void OnBossDefeated()
     {
+        Debug.Log("INSIDE OnBossDefeated");
+        
         if (!timerRunning) return;
         timerRunning = false;
 
@@ -142,7 +144,7 @@ public class GameManager : MonoBehaviour
         // update victory screen text
         victoryNameText.text = selectedCowName;
         victoryTimeText.text = FormatTime(runtimeSeconds);
-
+        
         // goodEndScene.SetActive(true);
         simpleFadeIn.PlayGoodEndVideo();
         // goodEndScene.SetActive(false);

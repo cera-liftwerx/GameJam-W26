@@ -22,9 +22,9 @@ public class PaperCanvasController : MonoBehaviour
         dialogueLines = new string[]
         {
             "Moo MOOO!! Moomooo moooo. Moomooo momoo. M.O.O.! MOOOOOO moomomomo mooomoo mooo. Moo mooo. Moo mooo moo mooooooo momomooooo mooo mmmmoooooo. mooo moo moo mooo MOOOOOOOOOO momooo.",
-            "Oh no! The neFURious Behemoth Claw pirates want to eat you. These PURRpetrators are blind but have hyPURRactive hearing, so keep quiet to avoid detection. To moo-ve, teleport with your joysticks.",
-            "Both the aliens and the chains have suPUR good senses of smell, so use that to your advantage. To fart, cover your nose using your left hand and fan the air in front of you with your right hand. ",
-            "Gas urself up by drinking protein COWder. There's one in this room. You can grab it by squeezing your grip trigger.",
+            "Oh no! Hello fellow cow who has been captured, I was once in your position. Here are some tips to get home: The aliens are from the neFURious Behemoth Claw clan and they want to eat you. These PURRpetrators are blind but have hyPURRactive hearing, so KEEP QUIET to avoid detection. To moo-ve, teleport with your joysticks.",
+            "The aliens suPUR good senses of smell, and since you are a cow, when you hit them hard you can't help but fart and the fart smell injures them.",
+            "Gas urself up and therefore heal by drinking protein COWder. There's one in this room. You can grab it by squeezing your grip trigger.",
             "Better get Mooving now. -COWnt Methany MOOscles"
         };
 

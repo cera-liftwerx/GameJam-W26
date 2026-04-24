@@ -29,6 +29,7 @@ public class MapGenerator : MonoBehaviour
         new RoomPopulator(graph, config).Populate();
         PlacePlayer();
         tutorialNote.SetActive(true);
+        GameManager.instance.BeginTimer();
     }
 
     void PlacePlayer()
