@@ -66,7 +66,7 @@ public class PlayerCharacter : Character
     protected override IEnumerator Die()
     {
         //GameJamManager.Instance.GameOver();
-        simpleFadeIn.FadeFromTransparentToBlack();
+        // simpleFadeIn.FadeFromTransparentToBlack();
         yield return null;
         GameManager.instance.OnPlayerDied();
     }

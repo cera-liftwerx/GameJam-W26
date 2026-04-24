@@ -37,6 +37,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Scene References")]
     public SimpleFadeIn simpleFadeIn;
+    public GameObject startScene;
+    public GameObject badEndScene;
+    public GameObject goodEndScene;
 
     private float runtimeStart;
     private float runtimeSeconds;
@@ -93,6 +96,9 @@ public class GameManager : MonoBehaviour
 
         // show only the start screen at launch
         ShowScreen(startScreen);
+        // startScene.SetActive(true);
+        // simpleFadeIn.PlayIntroVideo();
+        // startScene.SetActive(false);
     }
 
     void OnStartPressed()
@@ -104,7 +110,9 @@ public class GameManager : MonoBehaviour
         ShowScreen(null);
 
         // start intro vid
+        // startScene.SetActive(true);
         simpleFadeIn.PlayIntroVideo();
+        // startScene.SetActive(false);
     }
 
     public void BeginTimer()
@@ -116,7 +124,9 @@ public class GameManager : MonoBehaviour
     public void OnPlayerDied()
     {
         timerRunning = false;
-        // TODO: start bad ending
+        // badEndScene.SetActive(true);
+        simpleFadeIn.PlayBadEndVideo();
+        // badEndScene.SetActive(false);
         AudioManager.Instance.PlayOneShot(playerDeathClip);
         ShowScreen(badEndScreen);
     }
@@ -133,7 +143,10 @@ public class GameManager : MonoBehaviour
         victoryNameText.text = selectedCowName;
         victoryTimeText.text = FormatTime(runtimeSeconds);
 
-        // TODO: start good ending
+        // goodEndScene.SetActive(true);
+        simpleFadeIn.PlayGoodEndVideo();
+        // goodEndScene.SetActive(false);
+
         AudioManager.Instance.PlayOneShot(confettiClip);
         ShowScreen(goodEndScreen);
         DisplayLeaderboard();

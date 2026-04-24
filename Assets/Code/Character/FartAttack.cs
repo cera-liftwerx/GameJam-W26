@@ -48,11 +48,11 @@ public class FartAttack : MonoBehaviour
 
         // --- LOGCAT DIAGNOSTICS ---
         // Search "FART_LOG" in Logcat to see this
-        Debug.Log($"FART_LOG: Nose:{noseDist:F2}/{noseThreshold} | Ext:{extensionDist:F2}/{extensionThreshold} | Pose:{isAtNose && isExtended}");
+        // Debug.Log($"FART_LOG: Nose:{noseDist:F2}/{noseThreshold} | Ext:{extensionDist:F2}/{extensionThreshold} | Pose:{isAtNose && isExtended}");
 
         if (isAtNose && isExtended)
         {
-            Debug.Log($"FART_LOG: controllers in right position");
+            // Debug.Log($"FART_LOG: controllers in right position");
             // Visual feedback (Green Tint)
             if (vignette) vignette.intensity.value = Mathf.Lerp(vignette.intensity.value, 0.45f, Time.deltaTime * 5f);
 
@@ -60,11 +60,11 @@ public class FartAttack : MonoBehaviour
             float currentSpeed = (fanningHand.position - lastFanPosition).magnitude / Time.deltaTime;
             
             // Log speed when in pose
-            Debug.Log($"FART_LOG: Fanning Speed: {currentSpeed:F2}/{fanSpeedThreshold}, hasFiredThisStroke: {hasFiredThisStroke}");
+            // Debug.Log($"FART_LOG: Fanning Speed: {currentSpeed:F2}/{fanSpeedThreshold}, hasFiredThisStroke: {hasFiredThisStroke}");
 
             if (currentSpeed > fanSpeedThreshold && !hasFiredThisStroke)
             {
-                Debug.Log("FART_LOG: ATTACK TRIGGERED!");
+                // Debug.Log("FART_LOG: ATTACK TRIGGERED!");
                 TriggerFartBurst();
                 hasFiredThisStroke = true;
             }

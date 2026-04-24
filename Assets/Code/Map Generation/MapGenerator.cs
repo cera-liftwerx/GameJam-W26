@@ -10,15 +10,13 @@ public class MapGenerator : MonoBehaviour
     public GameObject controlRoomPrefab;
     public GameObject standardRoomPrefab;
     public GameObject spawnRoomPrefab;
-    public GameObject microphoneDetector;
-
     private LayerGraph graph = new();
 
 
     void Awake()
     {
         // GenerateMap();
-        microphoneDetector.SetActive(true);
+        // microphoneDetector.SetActive(true);
     }
 
     public void GenerateMap()
@@ -48,6 +46,11 @@ public class MapGenerator : MonoBehaviour
             return;
         }
         // Debug.Log($"why fort {spawnRoom.playerSpawnPoint.position}, player name {player.name}");
+        // spawn a temporary floor collider under the player spawn point
+        GameObject tempFloor = new GameObject("temp floor collider");
+        tempFloor.transform.position = spawnRoom.playerSpawnPoint.position - new Vector3(0, 0.1f, 0);
+        BoxCollider col = tempFloor.AddComponent<BoxCollider>();
+        col.size = new Vector3(3f, 0.2f, 3f);
         player.transform.position = spawnRoom.playerSpawnPoint.position;
     }
 

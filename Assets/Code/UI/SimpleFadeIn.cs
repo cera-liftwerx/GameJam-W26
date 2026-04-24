@@ -7,7 +7,7 @@ using UnityEngine.Video;
 
 FINDING THE RIGHT TIMING TOOK A LONG TIME, DO NOT CHANGE TIMING VALUES besides fadeDuration UNLESS YOU NEED TO
 
-
+okay
 
 */
 public class SimpleFadeIn : MonoBehaviour
@@ -20,10 +20,19 @@ public class SimpleFadeIn : MonoBehaviour
     [SerializeField] protected GameObject cameraLocation;
     [SerializeField] protected GameObject box;
     [SerializeField] protected List<GameObject> stuffOnOff = new List<GameObject>();
-    [SerializeField] private VideoPlayer videoPlayer;
-    [SerializeField] private Renderer videoRenderer;
+    [SerializeField] private VideoPlayer startSceneVideoPlayer;
+    [SerializeField] private Renderer startSceneVideoRenderer;
+    [SerializeField] private VideoPlayer badEndVideoPlayer;
+    [SerializeField] private Renderer badEndVideoRenderer;
+    [SerializeField] private VideoPlayer goodEndVideoPlayer;
+    [SerializeField] private Renderer goodEndVideoRenderer;
+    public GameObject startScene;
+    public GameObject badEndScene;
+    public GameObject goodEndScene;
 
-    private MapGenerator mapGenerator;
+
+    public MapGenerator mapGenerator;
+    public GameObject microphoneDetector;
 
     void Awake()
     {
@@ -32,33 +41,81 @@ public class SimpleFadeIn : MonoBehaviour
             //Debug.LogError("Fade Quad not assigned!");
             return;
         }
-        mapGenerator = GameObject.FindObjectOfType<MapGenerator>();
+
+        if (mapGenerator == null)
+        {
+            mapGenerator = GameObject.FindObjectOfType<MapGenerator>();
+        }
+
+        if (microphoneDetector == null)
+        {
+            microphoneDetector = GameObject.FindObjectOfType<MicrophoneDetector>(true).gameObject;
+        }
     }
 
     void Start()
     {
         // Subscribe to end event
-        videoPlayer.loopPointReached += OnVideoFinished;
+        startSceneVideoPlayer.loopPointReached += OnStartSceneVideoFinished;
+        badEndVideoPlayer.loopPointReached += OnBadEndVideoFinished;
+        goodEndVideoPlayer.loopPointReached += OnGoodEndVideoFinished;
 
         // set blind box
         box.transform.position = cameraLocation.transform.position;
         Vector3 rot = box.transform.eulerAngles;
         rot.y = cameraLocation.transform.eulerAngles.y; 
         box.transform.eulerAngles = rot;
-        activationScene(false);
     }
 
     public void PlayIntroVideo()
     {
-        videoPlayer.Play();
+        FadeFromTransparentToBlack();
+        startScene.SetActive(true);
+        StartCoroutine(WaitThenPlay(startSceneVideoPlayer));
     }
 
-    void OnVideoFinished(VideoPlayer vp)
+    public void PlayBadEndVideo()
+    {
+        FadeFromTransparentToBlack();
+        badEndScene.SetActive(true);
+        StartCoroutine(WaitThenPlay(badEndVideoPlayer));
+    }
+
+    public void PlayGoodEndVideo()
+    {
+        FadeFromTransparentToBlack();
+        goodEndScene.SetActive(true);
+        StartCoroutine(WaitThenPlay(goodEndVideoPlayer));
+    }
+
+    private IEnumerator WaitThenPlay(VideoPlayer player)
+    {
+        // wait for fade to black to finish before playing
+        yield return new WaitForSeconds(fadeDuration + 0.5f);
+        player.Play();
+    }
+
+    void OnStartSceneVideoFinished(VideoPlayer vp)
     {
         Debug.Log("Video finished!");
 
+        startScene.SetActive(false);
         mapGenerator.GenerateMap();
+        microphoneDetector.SetActive(true);
+        FadeFromBlackToTransparent();
+    }
 
+    void OnBadEndVideoFinished(VideoPlayer vp)
+    {
+        Debug.Log("Video finished!");
+        badEndScene.SetActive(false);
+        FadeFromBlackToTransparent();
+    }
+
+    void OnGoodEndVideoFinished(VideoPlayer vp)
+    {
+        Debug.Log("Video finished!");
+        goodEndScene.SetActive(false);
         FadeFromBlackToTransparent();
     }
 
@@ -76,9 +133,11 @@ public class SimpleFadeIn : MonoBehaviour
             // skip xr origin
             if (obj.tag == "Player") continue;
 
-            // skip game manager and game canvases
-            if (obj.name == "Persistent") continue;
+            // skip managers
+            if (obj.name == "Game Manager") continue;
+            if (obj.name == "Audio Manager") continue;
 
+            if (obj.name == "Teleport Area Setup") continue;
             obj.SetActive(status);
         }
 
@@ -101,13 +160,17 @@ public class SimpleFadeIn : MonoBehaviour
         box.transform.eulerAngles = rot;
         activationScene(false);
         StartCoroutine(Fade(0f, 1f));
-        StartCoroutine(FadeRoutine(1.5f, fadeDuration+0.5f));
+        StartCoroutine(FadeRoutine(1.5f, fadeDuration+0.5f, startSceneVideoRenderer));
+        StartCoroutine(FadeRoutine(1.5f, fadeDuration+0.5f, badEndVideoRenderer));
+        StartCoroutine(FadeRoutine(1.5f, fadeDuration+0.5f, goodEndVideoRenderer));
     }
 
     protected IEnumerator delayedFadeAway()
     {
         yield return new WaitForSeconds(1f); 
-        StartCoroutine(FadeRoutine(0.0f, fadeDuration-1.8f));
+        StartCoroutine(FadeRoutine(0.0f, fadeDuration-1.8f, startSceneVideoRenderer));
+        StartCoroutine(FadeRoutine(0.0f, fadeDuration-1.8f, badEndVideoRenderer));
+        StartCoroutine(FadeRoutine(0.0f, fadeDuration-1.8f, goodEndVideoRenderer));
         yield return new WaitForSeconds(0.25f); 
         StartCoroutine(Fade2(1f, 0f));
         yield return new WaitForSeconds(2f); 
@@ -152,7 +215,7 @@ public class SimpleFadeIn : MonoBehaviour
         mat.SetColor("_BaseColor", new Color(color.r, color.g, color.b, endAlpha));
     }
 
-    private IEnumerator FadeRoutine(float targetAlpha, float duration)
+    private IEnumerator FadeRoutine(float targetAlpha, float duration, Renderer videoRenderer)
     {
         yield return new WaitForSeconds(0.5f);
         Material videoMat = videoRenderer.material;
