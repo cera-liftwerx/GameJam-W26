@@ -134,8 +134,7 @@ public class SimpleFadeIn : MonoBehaviour
             if (obj.tag == "Player") continue;
 
             // skip managers
-            if (obj.name == "Game Manager") continue;
-            if (obj.name == "Audio Manager") continue;
+            if (obj.name == "Managers") continue;
 
             if (obj.name == "Teleport Area Setup") continue;
             obj.SetActive(status);
