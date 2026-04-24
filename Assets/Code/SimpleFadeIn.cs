@@ -14,7 +14,7 @@ public class SimpleFadeIn : MonoBehaviour
 {
     public Renderer fadeQuad;        // Assign the Quad's Renderer in the Inspector
     public float fadeDuration = 1f;  // Duration of the fade in seconds
-
+    [SerializeField] Transform player;
     private Material mat;
 
     [SerializeField] protected GameObject cameraLocation;
@@ -22,6 +22,9 @@ public class SimpleFadeIn : MonoBehaviour
     [SerializeField] protected List<GameObject> stuffOnOff = new List<GameObject>();
     [SerializeField] private VideoPlayer videoPlayer;
     [SerializeField] private Renderer videoRenderer;
+
+    [SerializeField] public VideoPlayer videoPlayerBadEnding;
+    [SerializeField] public VideoPlayer videoPlayerGoodEnding;
 
     private MapGenerator mapGenerator;
 
@@ -37,6 +40,8 @@ public class SimpleFadeIn : MonoBehaviour
 
     void Start()
     {
+        mat = fadeQuad.material;
+        mat.renderQueue = 4000;
         // Subscribe to end event
         videoPlayer.loopPointReached += OnVideoFinished;
 
@@ -51,11 +56,11 @@ public class SimpleFadeIn : MonoBehaviour
     void OnVideoFinished(VideoPlayer vp)
     {
         Debug.Log("Video finished!");
-
+        videoPlayer.transform.gameObject.SetActive(false);
         //mapGenerator.GenerateMap();
 
         // Call your function here
-        FadeFromBlackToTransparent();
+        //FadeFromBlackToTransparent();
     }
 
     private void activationScene(bool status)
@@ -72,6 +77,7 @@ public class SimpleFadeIn : MonoBehaviour
 
     public void FadeFromTransparentToBlack()
     {
+        player.position = new Vector3(0f,100f,0f);
         box.transform.position = cameraLocation.transform.position;
         Vector3 rot = box.transform.eulerAngles;
         rot.y = cameraLocation.transform.eulerAngles.y; 
@@ -80,7 +86,17 @@ public class SimpleFadeIn : MonoBehaviour
         StartCoroutine(Fade(0f, 1f));
         StartCoroutine(FadeRoutine(1.5f, fadeDuration+0.5f));
     }
-
+    public void badEnding()
+    {
+        // Get material instance to avoid modifying shared material
+        videoPlayerBadEnding.transform.gameObject.SetActive(true);
+        videoPlayerBadEnding.Play();
+    }
+    public void goodEnding()
+    {
+        videoPlayerGoodEnding.transform.gameObject.SetActive(true);
+        videoPlayerGoodEnding.Play();
+    }
     protected IEnumerator delayedFadeAway()
     {
         yield return new WaitForSeconds(1f); 

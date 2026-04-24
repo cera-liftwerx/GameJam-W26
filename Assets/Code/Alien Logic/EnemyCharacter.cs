@@ -25,6 +25,7 @@ public class EnemyCharacter : Character
     protected MicrophoneDetector microphoneDetector;
     protected bool chasing;
     [SerializeField] private float chasingTime = 15f;
+    private bool isBoss;
     protected override void Awake()
     {
         base.Awake();
@@ -33,10 +34,13 @@ public class EnemyCharacter : Character
         player = FindObjectOfType<PlayerCharacter>();
         Debug.Log("test: " + player.transform.name);
         microphoneDetector = player.microphoneDetector;
-
+        isBoss = false;
         chasing = false;
     }
-
+    public void setBossstatus()
+    {
+        isBoss = true;
+    }
     protected override void Start()
     {
         base.Start();
@@ -110,6 +114,10 @@ public class EnemyCharacter : Character
     {
         animator.SetTrigger("Die");
         agent.enabled = false;
+        if (isBoss)
+        {
+            player.confirmBossDefeat();
+        }
         audioSource.PlayOneShot(deathSound);
         yield return new WaitForSeconds(4f);
         Destroy(gameObject);

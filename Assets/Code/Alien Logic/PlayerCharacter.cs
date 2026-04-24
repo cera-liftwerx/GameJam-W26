@@ -62,6 +62,19 @@ public class PlayerCharacter : Character
     {
         //GameJamManager.Instance.GameOver();
         simpleFadeIn.FadeFromTransparentToBlack();
+        simpleFadeIn.badEnding();
+        yield return null;
+    }
+
+    public void confirmBossDefeat()
+    {
+        winner();
+    }
+    private IEnumerator winner()
+    {
+        //GameJamManager.Instance.GameOver();
+        simpleFadeIn.FadeFromTransparentToBlack();
+        simpleFadeIn.goodEnding();
         yield return null;
     }
 }
