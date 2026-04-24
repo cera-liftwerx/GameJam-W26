@@ -40,26 +40,49 @@ public class SimpleFadeIn : MonoBehaviour
         // Subscribe to end event
         videoPlayer.loopPointReached += OnVideoFinished;
 
-        // Start video
-        videoPlayer.Play();
+        // set blind box
         box.transform.position = cameraLocation.transform.position;
         Vector3 rot = box.transform.eulerAngles;
         rot.y = cameraLocation.transform.eulerAngles.y; 
         box.transform.eulerAngles = rot;
         activationScene(false);
     }
+
+    public void PlayIntroVideo()
+    {
+        videoPlayer.Play();
+    }
+
     void OnVideoFinished(VideoPlayer vp)
     {
         Debug.Log("Video finished!");
 
-        //mapGenerator.GenerateMap();
+        mapGenerator.GenerateMap();
 
-        // Call your function here
         FadeFromBlackToTransparent();
     }
 
     private void activationScene(bool status)
     {
+        // get the top level parent of this object to exclude it
+        Transform root = transform.root;
+
+        // go through every root object in the scene and toggle them
+        foreach (GameObject obj in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+        {
+            // skip the parent of this object
+            if (obj.transform == root) continue;
+
+            // skip xr origin
+            if (obj.tag == "Player") continue;
+
+            // skip game manager and game canvases
+            if (obj.name == "Persistent") continue;
+
+            obj.SetActive(status);
+        }
+
+        // turn off stuff we dont need in xr origin
         foreach (GameObject thing in stuffOnOff)
         {
             thing.SetActive(status);

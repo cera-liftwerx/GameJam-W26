@@ -190,6 +190,7 @@ public class RoomPopulator
             controlRoom.transform
         );
         boss.transform.localScale = Vector3.one * 0.4f;
+        boss.GetComponent<EnemyCharacter>().isBoss = true;
     }
 
     void Shuffle<T>(T[] array)

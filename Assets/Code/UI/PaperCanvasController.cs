@@ -43,6 +43,7 @@ public class PaperCanvasController : MonoBehaviour
             {
                 // Second press: Close the canvas
                 gameObject.SetActive(false);
+                GameManager.instance.BeginTimer();
             }
         }
     }

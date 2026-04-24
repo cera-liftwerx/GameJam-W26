@@ -10,14 +10,15 @@ public class MapGenerator : MonoBehaviour
     public GameObject controlRoomPrefab;
     public GameObject standardRoomPrefab;
     public GameObject spawnRoomPrefab;
+    public GameObject microphoneDetector;
 
     private LayerGraph graph = new();
 
-    public RuntimeNavMeshBaker navMeshBaker;
 
     void Awake()
     {
-        GenerateMap();
+        // GenerateMap();
+        microphoneDetector.SetActive(true);
     }
 
     public void GenerateMap()
@@ -28,8 +29,6 @@ public class MapGenerator : MonoBehaviour
         RandomizeTopDoors();
         new RoomPopulator(graph, config).Populate();
         PlacePlayer();
-        navMeshBaker.BakeNavMesh();
-        // DebugLogMap();
     }
 
     void PlacePlayer()
@@ -52,65 +51,10 @@ public class MapGenerator : MonoBehaviour
         player.transform.position = spawnRoom.playerSpawnPoint.position;
     }
 
-    // void DebugLogMap()
-    // {
-    //     int totalRooms = graph.rooms.SelectMany(l => l).Count();
-    //     Debug.Log($"=== map generation complete ===");
-    //     Debug.Log($"total layers: {graph.LayerCount} | total rooms: {totalRooms}");
-
-    //     for (int layer = 0; layer < graph.LayerCount; layer++)
-    //     {
-    //         var layerRooms = graph.rooms[layer];
-    //         Debug.Log($"--- layer {layer} | {layerRooms.Count} room(s) ---");
-
-    //         foreach (var room in layerRooms)
-    //         {
-    //             Debug.Log($"  room {room.roomIndex} | type: {room.roomType} | role: {room.role}");
-
-    //             // enemy spawn points
-    //             if (room.roomType == RoomType.Standard)
-    //             {
-    //                 var activeEnemySpawns = room.enemySpawnPoints
-    //                     .Where(sp => sp != null && sp.gameObject.activeSelf)
-    //                     .ToArray();
-    //                 Debug.Log($"    enemy spawns active: {activeEnemySpawns.Length} of {room.enemySpawnPoints.Length}");
-    //                 foreach (var sp in activeEnemySpawns)
-    //                     Debug.Log($"      enemy spawn at {sp.position}");
-
-    //                 // powerup spawn points
-    //                 var activePowerupSpawns = room.powerupSpawnPoints
-    //                     .Where(sp => sp != null && sp.gameObject.activeSelf)
-    //                     .ToArray();
-    //                 Debug.Log($"    powerup spawns active: {activePowerupSpawns.Length} of {room.powerupSpawnPoints.Length}");
-    //                 foreach (var sp in activePowerupSpawns)
-    //                     Debug.Log($"      powerup spawn at {sp.position}");
-    //             }
-
-    //             // control room boss spawn
-    //             if (room.roomType == RoomType.Control)
-    //             {
-    //                 if (room.bossSpawnPoint != null)
-    //                     Debug.Log($"    boss spawn at {room.bossSpawnPoint.position}");
-    //                 else
-    //                     Debug.Log($"    no boss spawn point assigned");
-    //             }
-
-    //             // top doors
-    //             if (room.doorTop != null && room.doorTop.Count > 0)
-    //             {
-    //                 int activeDoors = room.doorTop.Count(d => d != null && d.activeSelf);
-    //                 Debug.Log($"    top doors active: {activeDoors} of {room.doorTop.Count}");
-    //             }
-    //         }
-    //     }
-
-    //     Debug.Log($"=== end of map debug ===");
-    // }
-
     void RandomizeConfig()
     {
         config.n = Random.Range(3, 6); // inclusive
-        config.m = Random.value > 0.5f ? 3 : 5;
+        config.m = Random.Range(2, 3) * 2 - 1; // random odd number between 3 and 5 inclusive
     }
 
     void RandomizeTopDoors()

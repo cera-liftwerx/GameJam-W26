@@ -4,12 +4,14 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using Unity.XR.CoreUtils;
 using System.Runtime.CompilerServices;
+using UnityEngine.UI;
 
 public class PlayerCharacter : Character
 {
     [SerializeField] public MicrophoneDetector microphoneDetector;
-
     [SerializeField] SimpleFadeIn simpleFadeIn;
+    [SerializeField] private Slider healthBarSlider;
+
     protected override void Awake()
     {
         base.Awake();
@@ -26,6 +28,9 @@ public class PlayerCharacter : Character
     protected override void Update()
     {
         base.Update();
+
+        // update the fill amount
+        healthBarSlider.value = currentHealth / maxHealth;
     }
 
     public override void Heal(float hp)
@@ -63,5 +68,6 @@ public class PlayerCharacter : Character
         //GameJamManager.Instance.GameOver();
         simpleFadeIn.FadeFromTransparentToBlack();
         yield return null;
+        GameManager.instance.OnPlayerDied();
     }
 }

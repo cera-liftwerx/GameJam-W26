@@ -4,6 +4,7 @@ public class DoorOpener : MonoBehaviour
 {
     public bool isDisabled = false;
     private Animator animator;
+    public AudioClip doorOpenClip;
 
     void Start()
     {
@@ -23,7 +24,7 @@ public class DoorOpener : MonoBehaviour
         if (isDisabled) return;
         if (!other.CompareTag("Player")) return;
         animator.SetBool("character_nearby", true);
-        // AudioManager.Instance.PlaySequenceWithOverlap(mooClip, fartClip, overlapSeconds: 0.7f);
+        AudioManager.Instance.PlayOneShot(doorOpenClip);
     }
 
     void OnTriggerExit(Collider other)
@@ -31,5 +32,6 @@ public class DoorOpener : MonoBehaviour
         if (isDisabled) return;
         if (!other.CompareTag("Player")) return;
         animator.SetBool("character_nearby", false);
+        AudioManager.Instance.PlayOneShot(doorOpenClip);
     }
 }

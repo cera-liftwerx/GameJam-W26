@@ -63,26 +63,23 @@ public class AlienSoundController : MonoBehaviour
         // check what state the animator is currently in and return the matching clip
         AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
 
-        if (info.shortNameHash == stateIdle)
-        {
-            return idleClip;
-        }
-        if (info.shortNameHash == stateWalk)
-        {
-            return walkClip;
-        }
+        // if (info.shortNameHash == stateIdle)
+        // {
+        //     return idleClip;
+        // }
+        // if (info.shortNameHash == stateWalk)
+        // {
+        //     return walkClip;
+        // }
         if (info.shortNameHash == stateAttack)
         {
             return attackClip;
         }
-        if (info.shortNameHash == stateDeath)
-        {
-            return deathClip;
-        }
+        // if (info.shortNameHash == stateDeath)
+        // {
+        //     return deathClip;
+        // }
 
         return null;
     }
-
-    // TODO: stop the loop on death by calling StopCoroutine(soundLoop)
-    // or just let OnDisable handle it if we disable the GameObject on death
 }

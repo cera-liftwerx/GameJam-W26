@@ -65,6 +65,15 @@ public class AudioManager : MonoBehaviour
         src.PlayOneShot(clip);
     }
 
+    public void PlayLooping(AudioClip clip)
+    {
+        // create a dedicated audiosource for looping bgm
+        AudioSource source = gameObject.AddComponent<AudioSource>();
+        source.clip = clip;
+        source.loop = true;
+        source.Play();
+    }
+
     public void PlaySequenceWithOverlap(AudioClip first, AudioClip second, float overlapSeconds = 0.2f, float volume = 1f)
     {
         // start the first clip immediately then hand off to a coroutine
