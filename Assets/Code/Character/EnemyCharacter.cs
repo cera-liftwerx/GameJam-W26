@@ -15,9 +15,9 @@ public class EnemyCharacter : Character
     private NavMeshAgent agent;
     private Animator animator;
     private PlayerCharacter player;
-    [SerializeField] private float aggroDistance = 10f; // radius to attack player in (main objective to to hit tower)
-    [SerializeField] private float minAttackDelay = 1f;
-    [SerializeField] private float maxAttackDelay = 1f;
+    [SerializeField] private float aggroDistance = 5f; // radius to attack player in (main objective to to hit tower)
+    [SerializeField] private float minAttackDelay = 3f;
+    [SerializeField] private float maxAttackDelay = 5f;
     [SerializeField] private float attackBuildup = 0f;
     [SerializeField] private float attackDuration = 0.5f;
     [SerializeField] private float speed = 5f;
@@ -52,7 +52,7 @@ public class EnemyCharacter : Character
     void OnParticleCollision(GameObject other)
     {
         Debug.Log("[sadge] OnParticleCollision");
-        TakeDamage(attackHitBox.damage);
+        TakeDamage(30); // TODO: config?
     }
 
     protected override void Update()

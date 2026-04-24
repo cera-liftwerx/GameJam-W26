@@ -10,6 +10,7 @@ public class MapGenerator : MonoBehaviour
     public GameObject controlRoomPrefab;
     public GameObject standardRoomPrefab;
     public GameObject spawnRoomPrefab;
+    public GameObject tutorialNote;
     private LayerGraph graph = new();
 
 
@@ -27,6 +28,7 @@ public class MapGenerator : MonoBehaviour
         RandomizeTopDoors();
         new RoomPopulator(graph, config).Populate();
         PlacePlayer();
+        tutorialNote.SetActive(true);
     }
 
     void PlacePlayer()

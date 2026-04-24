@@ -14,14 +14,14 @@ public class FartAttack : MonoBehaviour
     [Header("Settings")]
     public float noseThreshold = 0.3f;      // Max distance for "at nose"
     public float extensionThreshold = 0.4f; // Min distance for "extended"
-    public float fanSpeedThreshold = 1f;  // Speed required to "fart"
+    public float fanSpeedThreshold = 0.5f;  // Speed required to "fart"
 
     private Vignette vignette;
     private Vector3 lastFanPosition;
     private bool hasFiredThisStroke = false;
 
     public SpawnerManager spawnManager;
-    [SerializeField] AudioClip mooClip;
+    // [SerializeField] AudioClip mooClip;
     [SerializeField] AudioClip fartClip;
 
     void Start()
@@ -94,7 +94,8 @@ public class FartAttack : MonoBehaviour
         fartParticles.transform.rotation = Quaternion.LookRotation(head.forward);
         
         // 3. Fire!
-        AudioManager.Instance.PlaySequenceWithOverlap(mooClip, fartClip, overlapSeconds: 0.7f);
+        // AudioManager.Instance.PlaySequenceWithOverlap(mooClip, fartClip, overlapSeconds: 0.7f);
+        AudioManager.Instance.PlayOneShot(fartClip);
         fartParticles.Emit(10); 
         
         Debug.Log("FART_LOG: Bubbles fired exactly where you are looking!");

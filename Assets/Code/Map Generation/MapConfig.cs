@@ -14,13 +14,13 @@ public class MapConfig : ScriptableObject
     [Header("content multipliers")]
     [SerializeField] public float powerupRoomMultiplier = 1f;
     [SerializeField] public float powerupCountMultiplier = 1f;
-    [SerializeField] public float enemyRoomMultiplier = 1f;
-    [SerializeField] public float enemyCountMultiplier = 1f;
+    [SerializeField] public float enemyRoomMultiplier = 0.5f;
+    [SerializeField] public float enemyCountMultiplier = 0.5f;
     [SerializeField] public float coexistChance = 1f;
 
     [Header("difficulty")]
     [SerializeField] public int difficulty = 1;
-    [SerializeField] public int maxEnemiesPerRoom = 9;
+    [SerializeField] public int maxEnemiesPerRoom = 6;
     [SerializeField] public int minEnemiesPerRoom = 0;
 
     [Header("room spacing")]

@@ -6,6 +6,7 @@ public class GrabAndTeleport : MonoBehaviour
     private UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable grabInteractable;
     [HideInInspector] public SpawnerManager manager;
     [HideInInspector] public SpawnPoint currentPoint;
+    private PlayerCharacter playerCharacter;
 
     void Awake()
     {
@@ -13,6 +14,7 @@ public class GrabAndTeleport : MonoBehaviour
         // Using selectEntered (the very start of the grab)
         grabInteractable.selectEntered.AddListener(OnGrab);
         manager = GameObject.FindObjectOfType<SpawnerManager>();
+        playerCharacter = GameObject.FindObjectOfType<PlayerCharacter>();
     }
 
     private void OnGrab(SelectEnterEventArgs args)
@@ -25,7 +27,7 @@ public class GrabAndTeleport : MonoBehaviour
             args.manager.SelectExit(args.interactorObject, args.interactableObject);
 
             manager.replenishFart();
-            
+            playerCharacter.Heal(30);
             // 2. Teleport it to a new room
             manager.MoveToRandomPoint(this.gameObject, currentPoint);
         } else

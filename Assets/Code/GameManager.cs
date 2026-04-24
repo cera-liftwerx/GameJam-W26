@@ -51,8 +51,8 @@ public class GameManager : MonoBehaviour
     private readonly string[] cowNames = new string[]
     {
         "The Stinker",
-        "Moomoo Moo Moo",
-        "Winner winner steak dinner",
+        "Moomoo Moo",
+        "Steak",
         "Dairy Queen",
         "Monke",
         "Moogan Freeman",

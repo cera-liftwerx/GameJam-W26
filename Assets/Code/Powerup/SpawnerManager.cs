@@ -9,8 +9,8 @@ public class SpawnerManager : MonoBehaviour
     // public int totalItemsInGame = 3;
     private List<SpawnPoint> allPoints = new List<SpawnPoint>();
     public Slider fartBar;
-    private float fartsRemaining = 1000f;
-    private float maxFarts = 1000f;
+    private float fartsRemaining = 10f;
+    private float maxFarts = 10f;
 
     void Start()
     {
@@ -90,7 +90,7 @@ public class SpawnerManager : MonoBehaviour
         // Debug.Log("[fart] inside replenishFart");
         if (fartsRemaining >= maxFarts) return;
         
-        fartsRemaining += 1f;
+        fartsRemaining += 5f;
         fartBar.value = (float)fartsRemaining / (float)maxFarts; // Slider value is 0 to 1
 
         // Debug.Log($"[fart] changed fartbar val to {fartBar.value}");
